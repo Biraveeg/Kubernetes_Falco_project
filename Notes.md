@@ -213,6 +213,49 @@ returned a big list of syscalls:
     6.8.0-142-generic
     pod "tmp" deleted from default namespace
 
+
+
+  Setup falco, and from there checked its startup log, which printed out the following: 
+  
+    ubuntu@falco-lab:~/lab$ kubectl logs -n falco -l app.kubernetes.io/name=falco -c falco --tail=50
+    Fri Oct 30 11:46:52 2026: Falco version: 0.45.2 (aarch64)
+    Fri Oct 30 11:46:52 2026: Falco initialized with configuration files:
+    Fri Oct 30 11:46:52 2026:    /etc/falco/config.d/engine-kind-falcoctl.yaml | schema validation: ok
+    Fri Oct 30 11:46:52 2026:    /etc/falco/falco.yaml | schema validation: ok
+    Fri Oct 30 11:46:52 2026: System info: Linux version 6.8.0-142-generic (buildd@bos03-arm64-111) (aarch64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #142-Ubuntu SMP PREEMPT_DYNAMIC Wed Sep  2 14:30:29 UTC 2026
+    Fri Oct 30 11:46:52 2026: Loaded plugin 'container@0.7.6' from file /usr/share/falco/plugins/libcontainer.so
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'podman' container engine.
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/run/podman/podman.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'docker' container engine.
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/var/run/docker.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'cri' container engine.
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/run/containerd/containerd.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/run/crio/crio.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/run/k3s/containerd/containerd.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/run/host-containerd/containerd.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'containerd' container engine.
+    Fri Oct 30 11:46:52 2026: [libs]: container: * enabled container runtime socket at '/host/run/host-containerd/containerd.sock'
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'lxc' container engine.
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'libvirt_lxc' container engine.
+    Fri Oct 30 11:46:52 2026: [libs]: container: Enabled 'bpm' container engine.
+    Fri Oct 30 11:46:52 2026: Loading rules from:
+    Fri Oct 30 11:46:52 2026:    /etc/falco/falco_rules.yaml | schema validation: ok
+    Fri Oct 30 11:46:52 2026: Hostname value has been overridden via environment variable to: lab-control-plane
+    Fri Oct 30 11:46:52 2026: The chosen syscall buffer dimension is: 8388608 bytes (8 MBs)
+    Fri Oct 30 11:46:52 2026: Starting health webserver with threadiness 4, listening on 0.0.0.0:8765
+    Fri Oct 30 11:46:52 2026: Loaded event sources: syscall
+    Fri Oct 30 11:46:52 2026: Enabled event sources: syscall
+    Fri Oct 30 11:46:52 2026: Opening 'syscall' source with modern BPF probe.
+    Fri Oct 30 11:46:52 2026: One ring buffer every '2' CPUs.
+    Fri Oct 30 11:46:52 2026: [libs]: Trying to open the right engine!
+    Fri Oct 30 11:46:52 2026: [libs]: libpman: disabled BPF iterators (not running in the root PID namespace, or failed to determine it)
+    Fri Oct 30 11:46:53 2026: [libs]: libbpf: failed to determine tracepoint 'syscalls/sys_enter_creat' perf event ID: No such file or directory
+    Fri Oct 30 11:46:53 2026: [libs]: libbpf: prog 'creat_e': failed to create tracepoint 'syscalls/sys_enter_creat' perf event: No such file or directory
+    Fri Oct 30 11:46:53 2026: [libs]: libpman: failure while attaching TOCTOU mitigation program for 'creat' system call. Detection will continue to work, but TOCTOU mitigation may not properly work (errno: 2 | message: No such file or directory)
+    Fri Oct 30 11:46:53 2026: [libs]: libbpf: failed to determine tracepoint 'syscalls/sys_enter_open' perf event ID: No such file or directory
+    Fri Oct 30 11:46:53 2026: [libs]: libbpf: prog 'open_e': failed to create tracepoint 'syscalls/sys_enter_open' perf event: No such file or directory
+    Fri Oct 30 11:46:53 2026: [libs]: libpman: failure while attaching TOCTOU mitigation program for 'open' system call. Detection will continue to work, but TOCTOU mitigation may not properly work (errno: 2 | message: No such file or directory)
+
   
 
   
