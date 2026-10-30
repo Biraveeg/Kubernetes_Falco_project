@@ -175,8 +175,47 @@ returned a big list of syscalls:
       +++ exited with 0 +++
 
   IMPORTANT: strace is slow because it stops the program at every syscall to record it. Falco on the other hand uses eBPF instead which is fast enough so it can run all the time without stoping the      program. 
+
+
+
+  Created a single node cluster using the following command: 
+  kind create cluster --name lab
+
+  From there used these commands to explore and understand what had been created: 
+
+  kubectl cluster-info # where the API server is
+  
+  kubectl get nodes -o wide # your single node and its details
+  
+  kubectl get pods -A # pods in all namespaces: the
+  
+  control plane's own pods in kube-system
+  
+  docker ps # the "node" is just a container in the VM
+  
+  docker exec lab-control-plane crictl ps # the containers running *inside*
+  that node container
+
+
+  From there i did a check to see for myself that the VM kernel, kind node´s kernel and the pods kernel are the same. 
+
+    uname -r
+    6.8.0-142-generic
+
+  
+    docker exec lab-control-plane uname -r
+    6.8.0-142-generic
+    
+    kubectl run tmp --rm -it --restart=Never --image=alpine -- uname -r
+    All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+    If you don't see a command prompt, try pressing enter.
+    warning: couldn't attach to pod/tmp, falling back to streaming logs: unable to upgrade connection: container tmp not found in pod tmp_default
+    6.8.0-142-generic
+    pod "tmp" deleted from default namespace
+
   
 
+  
 
 
 
