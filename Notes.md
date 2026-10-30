@@ -1,8 +1,11 @@
 Installed Multipass on my device so i can run a local ubuntu VM: 
 
 brew install --cask multipass.  ->         Uses brew to install multipass 
+
 multipass launch 24.04 --name falco-lab --cpus 4 --memory 8G --disk 40G --> create a vm using ubuntu 24.04 called falco-lab that uses 4 cpu cores and 8gb of ram, lastly is takes 40gb of disk space
+
 multipass list                       ->  shows the created VM´s and their specs including their ip adresses. 
+
 multipass shell falco-lab            -> Connects to the terminal of the VM. 
 
 Update and reboot the VM to the newest software version: 
