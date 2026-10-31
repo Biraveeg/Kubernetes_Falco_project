@@ -272,6 +272,13 @@ shell_procs in the rule conditions.)
 
 
 
+Created a demo app that is deliberately vulnerable. The app consists of a DNS-lookup service/tool, here the lookup function spawns a shell that it uses to check URL´s. This code is susceptible to prompt injection attacks (See app/app.py for the code). Since we are doing this in a lab environment to understand how attacks work this is fine. Though in a real application we would most likely run the lookup function as a subprocess without a shell using the command subprocess.run() for example.      
+
+  Note learned: If an app does not need the kubernetes API, it is a good idea to set "automountServiceAccountToken: false" in the pod spec so that the service token is not mounted and not used as potential attack point.  
+
+
+
+
 
 
 
