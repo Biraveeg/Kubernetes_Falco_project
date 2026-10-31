@@ -256,7 +256,32 @@ returned a big list of syscalls:
     Fri Oct 30 11:46:53 2026: [libs]: libbpf: prog 'open_e': failed to create tracepoint 'syscalls/sys_enter_open' perf event: No such file or directory
     Fri Oct 30 11:46:53 2026: [libs]: libpman: failure while attaching TOCTOU mitigation program for 'open' system call. Detection will continue to work, but TOCTOU mitigation may not properly work (errno: 2 | message: No such file or directory)
 
-  
+1. Falco runs in a different pod from nginx. How did it see your shell? (Part 0 and the
+uname -r experiment.)
+  Even though Falco was run on a different shell, it could still see nginx due to them both using the same kernel. This is due to all the pods sharing one kernel. 
+
+
+2. In the Terminal shell alert, what is the parent of sh? Trace the path of kubectl exec :
+kubectl → API server → kubelet → containerd → your shell.
+ In the terminal shell alert the parent of sh is listed as: "parent=containerd-shim". When running the kubectl exec command the kubectl tool sends a request to the API server. The API server then checks if you are allowed to exec into the pod, if yes it finds the pod and sends the request. From there the kubelet takes the exec command request and then forwards it to the containerd that then forwards that to the containerd-shim that finally starts the sh process in the container. So the reason that the parent of sh i containerd-shim and not kubectl is because kubectl only sends the network request, whilst containerd-shim actually completes the request. 
+
+3. Run kubectl exec deploy/nginx -- cat /etc/shadow — without -it and without a
+shell. Which of the two rules fires now, and why? (Hint: look at proc.tty and
+shell_procs in the rule conditions.)
+  Only the "Warning Sensitive file opened for reading by non-trusted program" is triggered because a file was read with a program that is considered not-trusted (in this case "cat"). Since there is no shell that was spawned (no shell_procs), furthermore since no terminal was allocated ("terminal" field i.e proc.tty field was 0)(the lack of -t in the command) the two conditions for the "Notice A shell was spawned in a container with an attached terminal" alert was not shown. 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 
